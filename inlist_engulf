@@ -1,0 +1,105 @@
+
+! For the sake of future readers of this file (yourself included),
+! ONLY include the controls you are actually using.  DO NOT include
+! all of the other controls that simply have their default values.
+
+&star_job
+
+     load_saved_model = .true.
+     load_model_filename = '1msun_rg_10.mod' ! '1msun_rg_168.mod' ! '1msun_rg_83.mod' ! '1msun_rg_4.mod'
+
+!    save_model_when_terminate = .true.
+ !   save_model_filename = '1msun_rg_4.mod'
+
+     pgstar_flag = .true.
+
+    set_initial_age = .true.
+    initial_age = 0
+    set_initial_model_number = .true.
+    initial_model_number = 0
+    profile_columns_file = 'profile_columns.list'
+
+    change_v_flag = .true.
+      change_initial_v_flag = .false.
+      new_v_flag = .true.
+
+!     set_initial_dt = .true.
+!    years_for_initial_dt = 0.05 ! 15 !80 ! 15
+
+/ ! end of star_job namelist
+
+
+&eos
+  ! eos options
+  ! see eos/defaults/eos.defaults
+
+/ ! end of eos namelist
+
+&kap
+  ! kap options
+  ! see kap/defaults/kap.defaults
+  use_Type2_opacities = .true.
+  Zbase = 0.02
+
+  / ! end of kap namelist
+
+
+&controls
+
+     initial_mass = 1
+     initial_z = 0.02 
+
+    use_other_energy = .true.
+
+      use_gold_tolerances = .true.
+!      use_eosDT2 = .true.
+!      use_eosELM = .true.
+      
+!      use_dedt_form_of_energy_eqn = .true.
+
+       energy_eqn_option = 'dedt'
+
+!      min_cell_energy_fraction_for_dedt_form = 1d-9
+!      use_eps_correction_for_KE_plus_PE_in_dLdm_eqn = .true.
+
+    super_eddington_scaling_factor = 1
+    super_eddington_wind_Ledd_factor = 1
+    surf_avg_tau = 100
+    trace_super_eddington_wind_boost = .true.
+    
+    profile_header_include_sys_details = .false.
+    ! max_timestep = 1d10
+
+     x_ctrl(1) =  0.001 !0.05 !1d-6     ! 1.66e-7 !0.001 !0.2     ! Companion Mass (Msun) 0.001Msun ~ Mj ! Mercury mass = 0.055 Mearth , Mercury Radius = 0.38 Rearth (1.66 -7 Msun,
+     x_ctrl(2) =  0.1 !0.25 !0.009157 ! 0.0038  ! 0.1 !0.27     ! Companion Radius (Rsun) 0.1Rsun ~ Rj
+     x_ctrl(3) = -10 ! 10.      ! Stop point for companion (Rsun). Set to < 0 if you do not want to use.
+     x_ctrl(4) = 0.005 !1d-2       ! Decrese timestep during grazing phase if (dr/r_influence) > this value
+     x_ctrl(5) = 0.05              ! Decrese timestep during full engulfment if (dr/r_influence) > this value
+     x_ctrl(6) = 10.11             ! Initial orbital separation (a in Rsun)
+     x_ctrl(7) = 1d-3 !1d-4          ! Max tolerance for da/a =  (dr/Orbital_separation) due to Tides
+     x_ctrl(8) = 1d-10 !7.8d-8         ! Sigma Tides Efficiency (e.g. 7.8d-8 see Hansen et al. 2010), no tides if < 0.0
+     x_logical_ctrl(1) = .true. ! If true apply tides to orbital decay also when a < R* 
+
+!     cool_wind_RGB_scheme = 'Reimers'
+!     reimers_scaling_factor = 1.0
+!     photosphere_r_upper_limit = 4
+
+     photo_interval = 100
+     profile_interval = 50
+     history_interval=1
+     max_num_profile_models = 2000
+     min_timestep_limit = 1d-12
+
+  ! options for energy conservation (see MESA V, Section 3)
+
+  ! Solver
+    varcontrol_target = 1d-2 ! 1d-3
+
+ !    min_timestep_limit = 1d-12
+
+  ! Mesh
+    mesh_delta_coeff = 0.8 ! 0.2
+!    max_allowed_nz = 16000
+
+
+/ ! end of controls namelist
